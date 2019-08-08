@@ -53,16 +53,15 @@ public class HttpSender {
     /**
      * 服务进行注册
      * @param request
-     * @param host
-     * @param port
+     * @param
+     * @param
      * @return
      */
-    public RegisterResponse register(RegisterRequest request,String host,int port) {
+    public RegisterResponse register(RegisterRequest request) {
 
 
         StringBuilder stringBuilder = new StringBuilder();
-        String url = stringBuilder.append(host).append(":").append(port).append("/").append("register").toString();
-
+        String url = stringBuilder.append(request.getIp()).append(":").append(request.getPort()).append("/").append("register").toString();
 
         HttpPost post = new HttpPost(url);
 
@@ -78,8 +77,6 @@ public class HttpSender {
         post.addHeader("Content-Type", "application/json");
         try {
             HttpResponse response = client.execute(post);
-            System.out.println(response);
-
 
         } catch (IOException e) {
             e.printStackTrace();

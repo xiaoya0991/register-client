@@ -88,9 +88,6 @@ public class RegisterClient {
 
         @Override
         public void run() {
-            // 应该是获取当前机器的信息
-            // 包括当前机器的ip地址、hostname，以及你配置这个服务监听的端口号
-            // 从配置文件里可以拿到
             RegisterRequest registerRequest = new RegisterRequest();
             registerRequest.setServiceName(SERVICE_NAME);
             registerRequest.setIp(IP);
@@ -98,12 +95,14 @@ public class RegisterClient {
             registerRequest.setPort(PORT);
             registerRequest.setServiceInstanceId(serviceInstanceId);
 
-            RegisterResponse registerResponse = httpSender.register(registerRequest,host, port);
+            RegisterResponse registerResponse = httpSender.register(registerRequest);
 
             System.out.println("服务注册的结果是：" + registerResponse.getStatus() + "......");
         }
 
     }
+
+
 
     /**
      * 心跳线程
