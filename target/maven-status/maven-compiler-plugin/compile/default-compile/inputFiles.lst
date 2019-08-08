@@ -1,0 +1,15 @@
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/Applications.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/CachedServiceRegistry.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/http/HttpClientUtil.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/config/Configuration.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/HeartbeatRequest.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/Register.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/ServiceInstance.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/cache/RegisterClentCache.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/RegisterRequest.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/config/LocalConfiguration.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/DeltaRegistry.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/HeartbeatResponse.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/RegisterResponse.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/RegisterClient.java
+/Users/wenliang/porject/register-client/src/main/java/com/zhss/demo/register/client/HttpSender.java
