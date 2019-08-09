@@ -34,7 +34,6 @@ public class Register {
 
         init();
 
-
     }
 
     /**
@@ -52,18 +51,6 @@ public class Register {
         System.out.println("注册中心初始化开始");
         registerClient.start();
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

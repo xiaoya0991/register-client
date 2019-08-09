@@ -68,7 +68,6 @@ public class RegisterClient {
      */
     public void start() {
         try {
-
             RegisterWorker registerWorker = new RegisterWorker();
             registerWorker.start();
             registerWorker.join();

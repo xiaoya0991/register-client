@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhss.demo.register.cache.RegisterClentCache;
 import com.zhss.demo.register.client.CachedServiceRegistry.RecentlyChangedServiceInstance;
+import com.zhss.demo.register.core.RegisterClientManagement;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -36,8 +37,23 @@ public class HttpSender {
      */
     private HttpClient client = HttpClientBuilder.create().build();
 
+
+
+    /***
+     * 注册中心客户端管理组件
+     */
+    private RegisterClientManagement register = RegisterClientManagement.getInstance();
+
+
+    /**
+     * 服务地址
+     */
     private String host;
 
+
+    /**
+     * 端口号
+     */
     private int port;
 
 
@@ -89,12 +105,9 @@ public class HttpSender {
     public HeartbeatResponse heartbeat(HeartbeatRequest request) {
         System.out.println("服务实例【" + request + "】，发送请求进行心跳......");
 
-
-
         Map<String,Object> map = new HashMap<>();
         map.put("serviceName", request.getServiceName());
         map.put("serviceInstanceId", request.getServiceInstanceId());
-
         try {
             HttpResponse response = this.client.execute(this.postRequest(map,this.getRequestUrl("heartbeat")));
         } catch (IOException e) {
@@ -131,14 +144,15 @@ public class HttpSender {
 
         registry.put("FINANCE-SERVICE", serviceInstances);
 
-        System.out.println("拉取注册表：" + registry);
 
-        String url = "http://localhost:8888/fetchFullRegistry";
-        HttpGet get = new HttpGet(url);
 
         try {
-            HttpResponse response = client.execute(get);
+            HttpResponse response = client.execute(this.getRequest(this.getRequestUrl("fetchFullRegistry")));
             HttpEntity entity = response.getEntity();
+
+            String string = entity.toString();
+
+
             System.out.println("响应状态为:" + response.getStatusLine());
 
         } catch (IOException e) {
@@ -176,13 +190,8 @@ public class HttpSender {
 
         DeltaRegistry deltaRegistry = new DeltaRegistry(recentlyChangedQueue, 2L);
 
-
-
-        String url = "http://localhost:8888/fetchDeltaRegistry";
-        HttpGet get = new HttpGet(url);
-
         try {
-            HttpResponse response = client.execute(get);
+            HttpResponse response = client.execute(this.getRequest(this.getRequestUrl("fetchDeltaRegistry")));
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -207,6 +216,18 @@ public class HttpSender {
         post.addHeader("Content-Type", "application/json");
 
         return post;
+    }
+
+
+    /***
+     * get请求
+     * @param url
+     * @return
+     */
+    private HttpGet getRequest(String url){
+        HttpGet get = new HttpGet(url);
+        return get;
+
     }
 
 
