@@ -38,15 +38,12 @@ public class HttpSender {
     private HttpClient client = HttpClientBuilder.create().build();
 
 
-    private HttpPost httpPost;
-
 
     /***
      * 缓存
      */
     public HttpSender(){
         this.clentCache = RegisterClentCache.getInstance();
-        this.httpPost = new HttpPost();
     }
 
 
@@ -57,14 +54,12 @@ public class HttpSender {
      * @param
      * @return
      */
-    public RegisterResponse register(RegisterRequest request) {
+    public RegisterResponse register(String host,int port,RegisterRequest request) {
 
 
         StringBuilder stringBuilder = new StringBuilder();
-        String url = stringBuilder.append(request.getIp()).append(":").append(request.getPort()).append("/").append("register").toString();
-
+        String url = stringBuilder.append(host).append(":").append(port).append("/").append("register").toString();
         HttpPost post = new HttpPost(url);
-
         Map<String,Object> map = new HashMap<>();
         map.put("hostname", request.getHostname());
         map.put("ip", request.getIp());
@@ -96,7 +91,6 @@ public class HttpSender {
      */
     public HeartbeatResponse heartbeat(HeartbeatRequest request) {
         System.out.println("服务实例【" + request + "】，发送请求进行心跳......");
-
 
 
         String url = "http://localhost:8888/heartbeat";

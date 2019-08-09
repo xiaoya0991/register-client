@@ -7,11 +7,11 @@ package com.zhss.demo.register.client;
  */
 public class RegisterClientTest {
 
-    public static void main(String[] args) throws Exception {
-        RegisterClient registerClient = new RegisterClient("http://localhost",8888);
-        registerClient.start();
-
-
-    }
+//    public static void main(String[] args) throws Exception {
+//        RegisterClient registerClient = new RegisterClient("http://localhost",8888);
+//        registerClient.start();
+//
+//
+//    }
 
 }

@@ -40,8 +40,13 @@ public class RegisterClient {
 
     private int port;
 
+    /***
+     *
+     */
+    private RegisterRequest registerRequest;
 
-    public RegisterClient( String host, int port) {
+
+    public RegisterClient( String host, int port,RegisterRequest registerRequest) {
         this.serviceInstanceId = UUID.randomUUID().toString().replace("-", "");
         this.httpSender = new HttpSender();
         this.heartbeatWorker = new HeartbeatWorker();
@@ -49,6 +54,7 @@ public class RegisterClient {
         this.registry = new CachedServiceRegistry(this, httpSender);
         this.host = host;
         this.port = port;
+        this.registerRequest = registerRequest;
     }
 
     /**
@@ -88,14 +94,8 @@ public class RegisterClient {
 
         @Override
         public void run() {
-            RegisterRequest registerRequest = new RegisterRequest();
-            registerRequest.setServiceName(SERVICE_NAME);
-            registerRequest.setIp(IP);
-            registerRequest.setHostname(HOSTNAME);
-            registerRequest.setPort(PORT);
-            registerRequest.setServiceInstanceId(serviceInstanceId);
 
-            RegisterResponse registerResponse = httpSender.register(registerRequest);
+            RegisterResponse registerResponse = httpSender.register(host,port,registerRequest);
 
             System.out.println("服务注册的结果是：" + registerResponse.getStatus() + "......");
         }
