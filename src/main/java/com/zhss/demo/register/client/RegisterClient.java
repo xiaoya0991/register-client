@@ -46,9 +46,15 @@ public class RegisterClient {
     private RegisterRequest registerRequest;
 
 
+    /**
+     *
+     * @param host
+     * @param port
+     * @param registerRequest
+     */
     public RegisterClient( String host, int port,RegisterRequest registerRequest) {
         this.serviceInstanceId = UUID.randomUUID().toString().replace("-", "");
-        this.httpSender = new HttpSender();
+        this.httpSender = new HttpSender(host,port);
         this.heartbeatWorker = new HeartbeatWorker();
         this.isRunning = true;
         this.registry = new CachedServiceRegistry(this, httpSender);
@@ -95,7 +101,7 @@ public class RegisterClient {
         @Override
         public void run() {
 
-            RegisterResponse registerResponse = httpSender.register(host,port,registerRequest);
+            RegisterResponse registerResponse = httpSender.register(registerRequest);
 
             System.out.println("服务注册的结果是：" + registerResponse.getStatus() + "......");
         }
