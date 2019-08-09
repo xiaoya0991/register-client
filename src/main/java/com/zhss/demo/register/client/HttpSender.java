@@ -36,13 +36,18 @@ public class HttpSender {
      */
     private HttpClient client = HttpClientBuilder.create().build();
 
+    private String host;
+
+    private int port;
 
 
     /***
      * 缓存
      */
-    public HttpSender(){
+    public HttpSender(String host,int port){
         this.clentCache = RegisterClentCache.getInstance();
+        this.host = host;
+        this.port = port;
     }
 
 
@@ -53,10 +58,8 @@ public class HttpSender {
      * @param
      * @return
      */
-    public RegisterResponse register(String host,int port,RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        String url = stringBuilder.append(host).append(":").append(port).append("/").append("register").toString();
         Map<String,Object> map = new HashMap<>();
         map.put("hostname", request.getHostname());
         map.put("ip", request.getIp());
@@ -65,7 +68,7 @@ public class HttpSender {
         map.put("serviceInstanceId", request.getServiceInstanceId());
 
         try {
-            HttpResponse response = client.execute(this.postRequest(map, url));
+            HttpResponse response = client.execute(this.postRequest(map,this.getRequestUrl("register")));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,11 +86,9 @@ public class HttpSender {
      * @param request
      * @return
      */
-    public HeartbeatResponse heartbeat(String host,int port,HeartbeatRequest request) {
+    public HeartbeatResponse heartbeat(HeartbeatRequest request) {
         System.out.println("服务实例【" + request + "】，发送请求进行心跳......");
 
-        StringBuilder stringBuilder = new StringBuilder();
-        String url = stringBuilder.append(host).append(":").append(port).append("/").append("register").toString();
 
 
         Map<String,Object> map = new HashMap<>();
@@ -95,7 +96,7 @@ public class HttpSender {
         map.put("serviceInstanceId", request.getServiceInstanceId());
 
         try {
-            HttpResponse response = this.client.execute(this.postRequest(map,url));
+            HttpResponse response = this.client.execute(this.postRequest(map,this.getRequestUrl("heartbeat")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -206,6 +207,20 @@ public class HttpSender {
         post.addHeader("Content-Type", "application/json");
 
         return post;
+    }
+
+
+    /***
+     * 获取请求地址
+     * @param requestType
+     * @return
+     */
+    private String getRequestUrl(String requestType){
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String url = stringBuilder.append(this.host).append(":").
+                               append(this.port).append("/").append(requestType).toString();
+        return url;
 
     }
 
