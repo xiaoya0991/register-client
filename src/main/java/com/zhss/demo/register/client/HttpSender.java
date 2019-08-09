@@ -31,7 +31,6 @@ public class HttpSender {
      */
     private RegisterClentCache clentCache;
 
-
     /***
      *http请求组件
      */
@@ -56,22 +55,17 @@ public class HttpSender {
      */
     public RegisterResponse register(String host,int port,RegisterRequest request) {
 
-
         StringBuilder stringBuilder = new StringBuilder();
         String url = stringBuilder.append(host).append(":").append(port).append("/").append("register").toString();
-        HttpPost post = new HttpPost(url);
         Map<String,Object> map = new HashMap<>();
         map.put("hostname", request.getHostname());
         map.put("ip", request.getIp());
         map.put("port", request.getPort());
         map.put("serviceName", request.getServiceName());
         map.put("serviceInstanceId", request.getServiceInstanceId());
-        Gson gson = new Gson();
-        String json = gson.toJson(map, new TypeToken<Map<String, String>>() {}.getType());
-        post.setEntity(new StringEntity(json, Charsets.UTF_8));
-        post.addHeader("Content-Type", "application/json");
+
         try {
-            HttpResponse response = client.execute(post);
+            HttpResponse response = client.execute(this.postRequest(map, url));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,27 +83,19 @@ public class HttpSender {
      * @param request
      * @return
      */
-    public HeartbeatResponse heartbeat(HeartbeatRequest request) {
+    public HeartbeatResponse heartbeat(String host,int port,HeartbeatRequest request) {
         System.out.println("服务实例【" + request + "】，发送请求进行心跳......");
 
+        StringBuilder stringBuilder = new StringBuilder();
+        String url = stringBuilder.append(host).append(":").append(port).append("/").append("register").toString();
 
-        String url = "http://localhost:8888/heartbeat";
-        HttpPost post = new HttpPost(url);
 
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("hostname", "admin");
-        map.put("ip", "123456");
-        map.put("port", "123456");
-        map.put("type", "123456");
-        map.put("serviceName", "123456");
-        map.put("serviceInstanceId", "123456");
-        Gson gson = new Gson();
-        String json = gson.toJson(map, new TypeToken<Map<String, String>>() {}.getType());
-        post.setEntity(new StringEntity(json, Charsets.UTF_8));
-        post.addHeader("Content-Type", "application/json");
+        Map<String,Object> map = new HashMap<>();
+        map.put("serviceName", request.getServiceName());
+        map.put("serviceInstanceId", request.getServiceInstanceId());
 
         try {
-            HttpResponse response = client.execute(post);
+            HttpResponse response = this.client.execute(this.postRequest(map,url));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,7 +116,7 @@ public class HttpSender {
 
 
         Map<String, Map<String, ServiceInstance>> registry =
-                new HashMap<String, Map<String, ServiceInstance>>();
+                new HashMap<>();
 
         ServiceInstance serviceInstance = new ServiceInstance();
         serviceInstance.setHostname("finance-service-01");
@@ -204,6 +190,22 @@ public class HttpSender {
 
         return deltaRegistry;
 
+    }
+
+
+    /***
+     *
+     * @param request
+     * @return
+     */
+    private HttpPost postRequest(Map<String,Object> request,String url){
+        HttpPost post = new HttpPost(url);
+        Gson gson = new Gson();
+        String json = gson.toJson(request, new TypeToken<Map<String, String>>() {}.getType());
+        post.setEntity(new StringEntity(json, Charsets.UTF_8));
+        post.addHeader("Content-Type", "application/json");
+
+        return post;
 
     }
 
