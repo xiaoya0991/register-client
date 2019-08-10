@@ -46,6 +46,12 @@ public class RegisterClient {
     private RegisterRequest registerRequest;
 
 
+
+
+
+
+
+
     /**
      *
      * @param host
@@ -62,6 +68,9 @@ public class RegisterClient {
         this.port = port;
         this.registerRequest = registerRequest;
     }
+
+
+
 
     /**
      * 启动ReigsterClient组件

@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -150,13 +151,24 @@ public class HttpSender {
             HttpResponse response = client.execute(this.getRequest(this.getRequestUrl("fetchFullRegistry")));
             HttpEntity entity = response.getEntity();
 
-            String string = entity.toString();
+            EntityUtils.toString(entity);
+
+            HttpClientUtil.postRequest()
+
+
 
 
             System.out.println("响应状态为:" + response.getStatusLine());
 
+            System.out.println("全量拉去注册表:"+EntityUtils.toString(entity));
+
         } catch (IOException e) {
             e.printStackTrace();
+
+        }finally {
+            if (client != null) {
+                client
+            }
         }
 
         return new Applications(registry);
