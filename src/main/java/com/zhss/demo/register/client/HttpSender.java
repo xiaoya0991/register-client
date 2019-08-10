@@ -1,19 +1,21 @@
 package com.zhss.demo.register.client;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhss.demo.register.cache.RegisterClentCache;
 import com.zhss.demo.register.client.CachedServiceRegistry.RecentlyChangedServiceInstance;
 import com.zhss.demo.register.core.RegisterClientManagement;
+import com.zhss.demo.register.http.HttpClientResult;
+import com.zhss.demo.register.http.HttpClientUtils;
 import org.apache.commons.codec.Charsets;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -87,6 +89,7 @@ public class HttpSender {
         try {
             HttpResponse response = client.execute(this.postRequest(map,this.getRequestUrl("register")));
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,46 +132,19 @@ public class HttpSender {
      */
     public Applications fetchServiceRegistry() {
 
-
-        Map<String, Map<String, ServiceInstance>> registry =
-                new HashMap<>();
-
-        ServiceInstance serviceInstance = new ServiceInstance();
-        serviceInstance.setHostname("finance-service-01");
-        serviceInstance.setIp("192.168.31.1207");
-        serviceInstance.setPort(9000);
-        serviceInstance.setServiceInstanceId("FINANCE-SERVICE-192.168.31.207:9000");
-        serviceInstance.setServiceName("FINANCE-SERVICE");
-
-        Map<String, ServiceInstance> serviceInstances = new HashMap<String, ServiceInstance>();
-        serviceInstances.put("FINANCE-SERVICE-192.168.31.207:9000", serviceInstance);
-
-        registry.put("FINANCE-SERVICE", serviceInstances);
-
-
+        Map<String, Map<String, ServiceInstance>> registry = null;
 
         try {
-            HttpResponse response = client.execute(this.getRequest(this.getRequestUrl("fetchFullRegistry")));
-            HttpEntity entity = response.getEntity();
 
-            EntityUtils.toString(entity);
+            HttpClientResult result = HttpClientUtils.doGet(this.getRequestUrl("fetchFullRegistry"));
+            if (result.getCode()== HttpStatus.SC_OK){
+                JSONObject fullRegistry = JSONObject.parseObject(result.getContent());
+                 registry = JSONObject.toJavaObject(fullRegistry, Map.class);
+            }
 
-            HttpClientUtil.postRequest()
-
-
-
-
-            System.out.println("响应状态为:" + response.getStatusLine());
-
-            System.out.println("全量拉去注册表:"+EntityUtils.toString(entity));
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }finally {
-            if (client != null) {
-                client
-            }
         }
 
         return new Applications(registry);

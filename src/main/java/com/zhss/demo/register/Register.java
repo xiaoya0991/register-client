@@ -45,7 +45,7 @@ public class Register {
         registerRequest.setIp(IP);
         registerRequest.setHostname(HOSTNAME);
         registerRequest.setPort(PORT);
-        registerRequest.setServiceInstanceId(registerRequest.getServiceInstanceId());
+        registerRequest.setServiceInstanceId("00000000000000000001");
         String url = "http://localhost";
         RegisterClient registerClient = new RegisterClient(url,8888,registerRequest);
         System.out.println("注册中心初始化开始");

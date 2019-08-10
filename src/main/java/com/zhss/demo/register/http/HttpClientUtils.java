@@ -28,7 +28,6 @@ public class HttpClientUtils {
      */
     private static final String ENCODING = "UTF-8";
 
-    //
 
     /**
      * 设置连接超时时间，单位毫秒。
@@ -175,7 +174,10 @@ public class HttpClientUtils {
         // 封装请求参数
         packageParam(params, httpPost);
 
-        // 创建httpResponse对象
+
+        /**
+         * 创建httpResponse对象
+         */
         CloseableHttpResponse httpResponse = null;
 
         try {
