@@ -3,10 +3,8 @@ package com.zhss.demo.register.client;
 import com.alibaba.fastjson.JSONObject;
 import com.zhss.demo.register.cache.RegisterClentCache;
 import com.zhss.demo.register.client.CachedServiceRegistry.RecentlyChangedServiceInstance;
-import com.zhss.demo.register.core.RegisterClientManagement;
 import com.zhss.demo.register.http.HttpClientResult;
 import com.zhss.demo.register.http.HttpClientUtils;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -154,7 +152,7 @@ public class HttpSender {
      */
     public DeltaRegistry fetchDeltaRegistry() {
         LinkedList<RecentlyChangedServiceInstance> recentlyChangedQueue =
-                new LinkedList<RecentlyChangedServiceInstance>();
+                new LinkedList<>();
 
         ServiceInstance serviceInstance = new ServiceInstance();
         serviceInstance.setHostname("order-service-01");
@@ -175,8 +173,11 @@ public class HttpSender {
         DeltaRegistry deltaRegistry = new DeltaRegistry(recentlyChangedQueue, 2L);
 
         try {
-            HttpResponse response = client.execute(this.getRequest(this.getRequestUrl("fetchDeltaRegistry")));
-            
+            HttpClientResult result = HttpClientUtils.doGet(this.getRequestUrl("fetchDeltaRegistry"));
+            if (result.getCode()== HttpStatus.SC_OK){
+
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
