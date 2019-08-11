@@ -33,13 +33,13 @@ public class HttpClientUtils {
     /**
      * 设置连接超时时间，单位毫秒。
      */
-    private static final int CONNECT_TIMEOUT = 2000;
+    private static final int CONNECT_TIMEOUT = 5000;
 
 
     /**
      * 请求获取数据的超时时间(即响应时间)，单位毫秒。
      */
-    private static final int SOCKET_TIMEOUT = 2000;
+    private static final int SOCKET_TIMEOUT = 5000;
 
 
     /**
@@ -99,6 +99,9 @@ public class HttpClientUtils {
         // 创建httpResponse对象
         CloseableHttpResponse httpResponse = null;
 
+
+        get.setConfig(getRequestConfig());
+
         try {
             return getHttpClientResult(httpResponse, httpClient, get);
 
@@ -157,8 +160,12 @@ public class HttpClientUtils {
     }
 
 
+
+
     private static RequestConfig getRequestConfig(){
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).
+                setSocketTimeout(SOCKET_TIMEOUT).setConnectTimeout(5000).
+                setStaleConnectionCheckEnabled(true).build();
         return requestConfig;
     }
 

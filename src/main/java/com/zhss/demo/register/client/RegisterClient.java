@@ -13,7 +13,7 @@ public class RegisterClient {
     public static final String IP = "192.168.31.207";
     public static final String HOSTNAME = "inventory01";
     public static final int PORT = 9000;
-    private static final Long HEARTBEAT_INTERVAL = 30 * 1000L;
+    //private static final Long HEARTBEAT_INTERVAL = 30 * 1000L;
 
     /**
      * 服务实例id
@@ -130,22 +130,32 @@ public class RegisterClient {
 
 
             HeartbeatResponse heartbeatResponse = null;
+            HeartbeatRequest heartbeatRequest = new HeartbeatRequest();
+            heartbeatRequest.setServiceName(SERVICE_NAME);
+            heartbeatRequest.setServiceInstanceId("00000000000000000001");
 
             while (isRunning()) {
-                try {
-                    List<HeartbeatRequest> heartbeatRequests = getHeartbeatRequests();
-                    for (HeartbeatRequest request : heartbeatRequests) {
-                        heartbeatResponse = httpSender.heartbeat(request);
-                    }
 
-                    Thread.sleep(HEARTBEAT_INTERVAL);
-                } catch (Exception e) {
+                try {
+
+                    heartbeatResponse = httpSender.heartbeat(heartbeatRequest);
+
+                    System.out.println("发送心跳：" + heartbeatRequest.getServiceName() + heartbeatRequest.getServiceInstanceId());
+
+
+                    Thread.sleep(3000);
+
+                }catch (Exception e){
                     e.printStackTrace();
+                }
+
                 }
             }
         }
 
-    }
+
+
+
 
     /**
      * 返回RegisterClient是否正在运行
@@ -157,32 +167,7 @@ public class RegisterClient {
     }
 
 
-    /***
-     * 获取需要发送心跳的请求列表
-     * @return
-     */
-    private List<HeartbeatRequest> getHeartbeatRequests(){
 
-        Applications applications = this.httpSender.fetchServiceRegistry();
-        Collection<Map<String, ServiceInstance>> registry = applications.getRegistry().values();
-        List<HeartbeatRequest> heartbeatRequests = new ArrayList<>();
-        for (Map<String, ServiceInstance> stringServiceInstanceMap : registry) {
-            Collection<ServiceInstance> servicename = stringServiceInstanceMap.values();
-            for (ServiceInstance serviceInstance : servicename) {
-                HeartbeatRequest heartbeatRequest = new HeartbeatRequest();
-                heartbeatRequest.setServiceInstanceId(serviceInstance.getServiceInstanceId());
-                heartbeatRequest.setServiceName(serviceInstance.getServiceName());
-                heartbeatRequests.add(heartbeatRequest);
-
-            }
-
-
-        }
-
-        return heartbeatRequests;
-
-
-    }
 
 
 }
