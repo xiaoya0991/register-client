@@ -87,7 +87,11 @@ public class HttpSender {
         map.put("serviceInstanceId", request.getServiceInstanceId());
 
         try {
-            HttpResponse response = client.execute(this.postRequest(map,this.getRequestUrl("register")));
+
+            HttpClientResult result = HttpClientUtils.doPost(this.getRequestUrl("register"), map);
+            if (result.getCode()== HttpStatus.SC_OK){
+                System.out.println("ddd");
+            }
 
 
         } catch (IOException e) {
@@ -113,11 +117,15 @@ public class HttpSender {
         map.put("serviceName", request.getServiceName());
         map.put("serviceInstanceId", request.getServiceInstanceId());
         try {
-            HttpResponse response = this.client.execute(this.postRequest(map,this.getRequestUrl("heartbeat")));
+
+            HttpClientResult result = HttpClientUtils.doPost(this.getRequestUrl("heartbeat"), map);
+            if (result.getCode()== HttpStatus.SC_OK){
+
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         HeartbeatResponse response = new HeartbeatResponse();
         response.setStatus(RegisterResponse.SUCCESS);
@@ -191,32 +199,8 @@ public class HttpSender {
     }
 
 
-    /***
-     *
-     * @param request
-     * @return
-     */
-    private HttpPost postRequest(Map<String,Object> request,String url){
-        HttpPost post = new HttpPost(url);
-        Gson gson = new Gson();
-        String json = gson.toJson(request, new TypeToken<Map<String, String>>() {}.getType());
-        post.setEntity(new StringEntity(json, Charsets.UTF_8));
-        post.addHeader("Content-Type", "application/json");
-
-        return post;
-    }
 
 
-    /***
-     * get请求
-     * @param url
-     * @return
-     */
-    private HttpGet getRequest(String url){
-        HttpGet get = new HttpGet(url);
-        return get;
-
-    }
 
 
     /***
