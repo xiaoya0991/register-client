@@ -1,6 +1,6 @@
 package com.zhss.demo.register.client;
 
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 在服务上被创建和启动，负责跟register-server进行通信
@@ -127,17 +127,17 @@ public class RegisterClient {
 
         @Override
         public void run() {
-            // 如果说注册成功了，就进入while true死循环
-            HeartbeatRequest heartbeatRequest = new HeartbeatRequest();
-            heartbeatRequest.setServiceName(SERVICE_NAME);
-            heartbeatRequest.setServiceInstanceId(serviceInstanceId);
+
 
             HeartbeatResponse heartbeatResponse = null;
 
             while (isRunning()) {
                 try {
-                    heartbeatResponse = httpSender.heartbeat(heartbeatRequest);
-                    System.out.println("心跳的结果为：" + heartbeatResponse.getStatus() + "......");
+                    List<HeartbeatRequest> heartbeatRequests = getHeartbeatRequests();
+                    for (HeartbeatRequest request : heartbeatRequests) {
+                        heartbeatResponse = httpSender.heartbeat(request);
+                    }
+
                     Thread.sleep(HEARTBEAT_INTERVAL);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -154,6 +154,34 @@ public class RegisterClient {
      */
     public Boolean isRunning() {
         return isRunning;
+    }
+
+
+    /***
+     * 获取需要发送心跳的请求列表
+     * @return
+     */
+    private List<HeartbeatRequest> getHeartbeatRequests(){
+
+        Applications applications = this.httpSender.fetchServiceRegistry();
+        Collection<Map<String, ServiceInstance>> registry = applications.getRegistry().values();
+        List<HeartbeatRequest> heartbeatRequests = new ArrayList<>();
+        for (Map<String, ServiceInstance> stringServiceInstanceMap : registry) {
+            Collection<ServiceInstance> servicename = stringServiceInstanceMap.values();
+            for (ServiceInstance serviceInstance : servicename) {
+                HeartbeatRequest heartbeatRequest = new HeartbeatRequest();
+                heartbeatRequest.setServiceInstanceId(serviceInstance.getServiceInstanceId());
+                heartbeatRequest.setServiceName(serviceInstance.getServiceName());
+                heartbeatRequests.add(heartbeatRequest);
+
+            }
+
+
+        }
+
+        return heartbeatRequests;
+
+
     }
 
 

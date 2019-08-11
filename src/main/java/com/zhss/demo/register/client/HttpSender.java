@@ -32,19 +32,15 @@ public class HttpSender {
      */
     private HttpClient client = HttpClientBuilder.create().build();
 
-
-
     /**
      * 服务地址
      */
     private String host;
 
-
     /**
      * 端口号
      */
     private int port;
-
 
     /***
      * 缓存
@@ -72,20 +68,20 @@ public class HttpSender {
         map.put("serviceName", request.getServiceName());
         map.put("serviceInstanceId", request.getServiceInstanceId());
 
+        RegisterResponse response = new RegisterResponse();
+
         try {
 
             HttpClientResult result = HttpClientUtils.doPost(this.getRequestUrl("register"), map);
             if (result.getCode()== HttpStatus.SC_OK){
-                System.out.println("ddd");
-            }
+                response.setStatus(RegisterResponse.SUCCESS);
 
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
+            response.setStatus(RegisterResponse.FAILURE);
         }
-        // 收到register-server响应之后，封装一个Response对象
-        RegisterResponse response = new RegisterResponse();
-        response.setStatus(RegisterResponse.SUCCESS);
 
         return response;
     }
@@ -102,19 +98,20 @@ public class HttpSender {
         Map<String,Object> map = new HashMap<>();
         map.put("serviceName", request.getServiceName());
         map.put("serviceInstanceId", request.getServiceInstanceId());
+
+
+        HeartbeatResponse response = new HeartbeatResponse();
         try {
 
             HttpClientResult result = HttpClientUtils.doPost(this.getRequestUrl("heartbeat"), map);
             if (result.getCode()== HttpStatus.SC_OK){
-
+                response.setStatus(RegisterResponse.SUCCESS);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+            response.setStatus(RegisterResponse.FAILURE);
         }
-
-        HeartbeatResponse response = new HeartbeatResponse();
-        response.setStatus(RegisterResponse.SUCCESS);
 
         return response;
     }
@@ -140,7 +137,6 @@ public class HttpSender {
             e.printStackTrace();
 
         }
-
         return new Applications(registry);
 
     }

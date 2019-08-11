@@ -11,7 +11,7 @@ import java.util.Map;
 public class Applications {
 
     private Map<String, Map<String, ServiceInstance>> registry =
-            new HashMap<String, Map<String, ServiceInstance>>();
+            new HashMap<>();
 
     public Applications() {
 
