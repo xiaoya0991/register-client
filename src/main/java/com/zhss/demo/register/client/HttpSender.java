@@ -36,12 +36,6 @@ public class HttpSender {
 
 
 
-    /***
-     * 注册中心客户端管理组件
-     */
-    private RegisterClientManagement register = RegisterClientManagement.getInstance();
-
-
     /**
      * 服务地址
      */
