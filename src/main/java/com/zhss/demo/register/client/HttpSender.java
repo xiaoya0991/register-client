@@ -1,20 +1,14 @@
 package com.zhss.demo.register.client;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.zhss.demo.register.cache.RegisterClentCache;
 import com.zhss.demo.register.client.CachedServiceRegistry.RecentlyChangedServiceInstance;
 import com.zhss.demo.register.core.RegisterClientManagement;
 import com.zhss.demo.register.http.HttpClientResult;
 import com.zhss.demo.register.http.HttpClientUtils;
-import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
